@@ -8,6 +8,7 @@
 
 import { properties }  from "./properties.js";
 import { hotels }       from "./hotels.js";
+import { agents, agentReviews } from "./agents.js";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // PROPERTIES
@@ -194,4 +195,43 @@ export function getSimilarHotels(hotelId, limit = 3) {
           h.starRating === current.starRating),
     )
     .slice(0, limit);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AGENTS
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Return all agents.
+ * @returns {import('../types/index.js').AgentFull[]}
+ */
+export function getAgents() {
+  return [...agents];
+}
+
+/**
+ * Return a single agent by ID or slug.
+ * @param {string} id
+ * @returns {import('../types/index.js').AgentFull | undefined}
+ */
+export function getAgentById(id) {
+  return agents.find((a) => a.id === id || a.slug === id);
+}
+
+/**
+ * Return all reviews for an agent.
+ * @param {string} agentId
+ * @returns {import('../types/index.js').AgentReview[]}
+ */
+export function getAgentReviews(agentId) {
+  return agentReviews.filter((r) => r.agentId === agentId);
+}
+
+/**
+ * Return all properties listed by an agent.
+ * @param {string} agentId
+ * @returns {import('../types/index.js').Property[]}
+ */
+export function getPropertiesByAgent(agentId) {
+  return properties.filter((p) => p.agent.id === agentId);
 }

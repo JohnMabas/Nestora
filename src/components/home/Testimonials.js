@@ -6,16 +6,16 @@ const testimonials = [
   {
     id: 1,
     quote:
-      "EstateOne made buying my first home in Lagos genuinely enjoyable. Amara was incredibly patient and the process felt transparent from day one. The property portal kept me informed every step of the way.",
+      "Elgaa Real Estate made buying my first home in Jos genuinely enjoyable. Amara was incredibly patient and the process felt transparent from day one. The property portal kept me informed every step of the way.",
     authorName:   "Tobi Adeyemi",
-    authorRole:   "First-time buyer, Lekki",
+    authorRole:   "First-time buyer, Jos",
     authorAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80",
     rating: 5,
   },
   {
     id: 2,
     quote:
-      "I was relocating from London and needed both short-term hotel accommodation and a long-term rental sorted. EstateOne handled both in one seamless conversation. I was genuinely impressed.",
+      "I was relocating from London and needed both short-term hotel accommodation and a long-term rental sorted. Elgaa handled both in one seamless conversation. I was genuinely impressed.",
     authorName:   "Chisom Obi",
     authorRole:   "Corporate relocation, Abuja",
     authorAvatar: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=80&q=80",
@@ -24,9 +24,9 @@ const testimonials = [
   {
     id: 3,
     quote:
-      "As a property investor I've used many platforms over the years. EstateOne stands out for its depth of data and the quality of its agent network. Three acquisitions and counting.",
+      "As a property investor I've used many platforms over the years. Elgaa Real Estate stands out for its depth of data and the quality of its agent network across Jos and Abuja. Three acquisitions and counting.",
     authorName:   "Emeka Okafor",
-    authorRole:   "Real estate investor, Lagos & Abuja",
+    authorRole:   "Real estate investor, Jos & Abuja",
     authorAvatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&q=80",
     rating: 5,
   },
@@ -44,7 +44,7 @@ export default function Testimonials() {
           id="testimonials-heading"
           eyebrow="Client Stories"
           title="What our clients say"
-          subtitle="Real experiences from people who found their perfect place through EstateOne."
+          subtitle="Real experiences from people who found their perfect place through Elgaa Real Estate."
           align="center"
           className="mx-auto mb-12 max-w-xl"
         />
@@ -77,7 +77,7 @@ export default function Testimonials() {
               {/* Quote */}
               <blockquote className="flex-1">
                 <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">
-                  "{t.quote}"
+                  &ldquo;{t.quote}&rdquo;
                 </p>
               </blockquote>
 

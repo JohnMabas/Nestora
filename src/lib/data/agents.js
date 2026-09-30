@@ -1,0 +1,153 @@
+/**
+ * @fileoverview  Mock agent data.
+ * Agents are the real-estate professionals who own/manage property listings.
+ * Replace with API calls when a backend is available.
+ */
+
+/** @type {import('../types/index.js').AgentFull[]} */
+export const agents = [
+  {
+    id: "agent-001",
+    slug: "amara-okafor",
+    name: "Amara Okafor",
+    email: "amara@elgaa.ng",
+    phone: "+234 801 234 5678",
+    avatar: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=200&q=80",
+    agencyName: "Elgaa Premium Realty",
+    licenseNumber: "RE/JOSPLATEAU/2015/001",
+    title: "Senior Real Estate Agent",
+    bio: "With nearly a decade in premium real estate across Jos and Abuja, Amara has built a reputation for matching discerning buyers with exceptional properties. She specialises in luxury residential and investment-grade assets, and is known for her meticulous attention to detail and deep local market knowledge.",
+    yearsExperience: 9,
+    languages: ["English", "Hausa", "Igbo"],
+    specializations: ["Luxury Homes", "Investment Properties", "Residential Rentals"],
+    areasServed: ["Jos", "Jos North", "Rayfield", "GRA"],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/amara-okafor",
+      instagram: "https://instagram.com/amara_elgaa",
+    },
+    verified: true,
+    rating: 4.9,
+    reviewCount: 38,
+    responseTime: "Usually responds within 1 hour",
+    activeListings: 34,
+    propertiesSold: 112,
+    createdAt: "2015-03-10T08:00:00.000Z",
+  },
+  {
+    id: "agent-002",
+    slug: "chidi-nwosu",
+    name: "Chidi Nwosu",
+    email: "chidi@elgaa.ng",
+    phone: "+234 802 345 6789",
+    avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=80",
+    agencyName: "Elgaa Premium Realty",
+    licenseNumber: "RE/ABUJA/2012/007",
+    title: "Principal Agent — Abuja",
+    bio: "Chidi is the head of Elgaa's Abuja desk with over 12 years building premium portfolios for diplomats, government officials, and corporate executives. He has closed more high-value transactions in Maitama and Asokoro than any other agent on the platform.",
+    yearsExperience: 12,
+    languages: ["English", "Igbo", "Yoruba"],
+    specializations: ["Luxury Villas", "Diplomatic Residences", "Commercial Real Estate"],
+    areasServed: ["Maitama", "Asokoro", "Wuse 2", "Jabi", "Abuja"],
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/chidi-nwosu",
+      instagram: null,
+    },
+    verified: true,
+    rating: 4.8,
+    reviewCount: 54,
+    responseTime: "Usually responds within 2 hours",
+    activeListings: 21,
+    propertiesSold: 189,
+    createdAt: "2012-06-01T08:00:00.000Z",
+  },
+  {
+    id: "agent-003",
+    slug: "ngozi-eze",
+    name: "Ngozi Eze",
+    email: "ngozi@elgaa.ng",
+    phone: "+234 803 456 7890",
+    avatar: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=200&q=80",
+    agencyName: "Elgaa Premium Realty",
+    licenseNumber: "RE/JOSPLATEAU/2018/022",
+    title: "Residential Property Specialist",
+    bio: "Ngozi helps families find their perfect home in Jos and the surrounding Plateau communities. Her warm, no-pressure approach and encyclopaedic knowledge of Jos estates have earned her a loyal base of repeat clients and referrals.",
+    yearsExperience: 6,
+    languages: ["English", "Igbo"],
+    specializations: ["Residential Sales", "Gated Estates", "First-Time Buyers"],
+    areasServed: ["Jos", "New Layout", "Bukuru", "Rantya"],
+    socialLinks: {
+      linkedin: null,
+      instagram: "https://instagram.com/ngozi_elgaa",
+    },
+    verified: true,
+    rating: 4.7,
+    reviewCount: 29,
+    responseTime: "Usually responds within 3 hours",
+    activeListings: 18,
+    propertiesSold: 67,
+    createdAt: "2018-11-15T08:00:00.000Z",
+  },
+];
+
+/** @type {import('../types/index.js').AgentReview[]} */
+export const agentReviews = [
+  // Amara reviews
+  {
+    id: "rev-001",
+    agentId: "agent-001",
+    reviewerName: "Emmanuel Duru",
+    rating: 5,
+    comment: "Amara is simply exceptional. She found us our dream home in Rayfield within three weeks of starting our search. Her communication was flawless from start to finish.",
+    createdAt: "2025-01-20T10:00:00.000Z",
+  },
+  {
+    id: "rev-002",
+    agentId: "agent-001",
+    reviewerName: "Sarah Vangala",
+    rating: 5,
+    comment: "Professional, patient, and incredibly knowledgeable about the Jos market. Amara negotiated a great price for us and handled all the paperwork smoothly.",
+    createdAt: "2025-02-14T14:30:00.000Z",
+  },
+  {
+    id: "rev-003",
+    agentId: "agent-001",
+    reviewerName: "Tunde Balogun",
+    rating: 4,
+    comment: "Very good experience overall. Amara showed us a good range of properties and was always available to answer questions. Would definitely use her again.",
+    createdAt: "2025-03-05T09:15:00.000Z",
+  },
+  // Chidi reviews
+  {
+    id: "rev-004",
+    agentId: "agent-002",
+    reviewerName: "Ambassador Yusuf Ibrahim",
+    rating: 5,
+    comment: "Chidi arranged a discreet off-market deal in Maitama that perfectly matched our requirements. Absolute discretion and professionalism throughout. Highest recommendation.",
+    createdAt: "2025-01-08T11:00:00.000Z",
+  },
+  {
+    id: "rev-005",
+    agentId: "agent-002",
+    reviewerName: "Olivia Martins",
+    rating: 5,
+    comment: "Relocated from London and Chidi made the entire process seamless. He understood what we needed without us having to explain twice. Found us the perfect property in Asokoro.",
+    createdAt: "2025-02-22T16:00:00.000Z",
+  },
+  // Ngozi reviews
+  {
+    id: "rev-006",
+    agentId: "agent-003",
+    reviewerName: "Peter Alkali",
+    rating: 5,
+    comment: "Ngozi helped us find a beautiful family home in New Layout. She never rushed us and gave us the best advice at every stage. Couldn't be happier.",
+    createdAt: "2025-01-30T10:30:00.000Z",
+  },
+  {
+    id: "rev-007",
+    agentId: "agent-003",
+    reviewerName: "Binta Musa",
+    rating: 4,
+    comment: "Great agent, very thorough. She knows every estate in Jos inside out. The process took a little longer than expected but the result was excellent.",
+    createdAt: "2025-03-12T13:00:00.000Z",
+  },
+];

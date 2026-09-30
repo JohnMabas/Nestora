@@ -3,7 +3,7 @@ import BookingConfirmation from "@/components/booking/BookingConfirmation";
 
 export const metadata = {
   title: "Booking Confirmed",
-  description: "Your hotel booking has been confirmed. Thank you for choosing EstateOne.",
+  description: "Your hotel booking has been confirmed. Thank you for choosing Elgaa Real Estate.",
 };
 
 export default function BookingConfirmationPage() {

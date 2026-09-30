@@ -170,8 +170,8 @@ export default async function PropertyDetailPage({ params }) {
               {/* Agent card */}
               <div className="bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-[var(--radius-xl)] p-5">
                 <h2 className="text-sm font-semibold text-[var(--color-text-primary)] mb-4">Listed by</h2>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="relative h-12 w-12 shrink-0 rounded-full overflow-hidden">
+                <Link href={`/agents/${property.agent.id}`} className="flex items-center gap-3 mb-4 hover:opacity-80 transition-opacity group">
+                  <div className="relative h-12 w-12 shrink-0 rounded-full overflow-hidden border border-[var(--color-border)] group-hover:border-[var(--color-brand)] transition-colors">
                     <Image
                       src={property.agent.photo}
                       alt={property.agent.name}
@@ -181,7 +181,7 @@ export default async function PropertyDetailPage({ params }) {
                     />
                   </div>
                   <div>
-                    <p className="font-semibold text-[var(--color-text-primary)] text-sm">{property.agent.name}</p>
+                    <p className="font-semibold text-[var(--color-text-primary)] text-sm group-hover:text-[var(--color-brand)] transition-colors">{property.agent.name}</p>
                     {property.agent.yearsExperience && (
                       <p className="text-xs text-[var(--color-text-muted)]">
                         {property.agent.yearsExperience} yrs experience
@@ -193,7 +193,7 @@ export default async function PropertyDetailPage({ params }) {
                       </p>
                     )}
                   </div>
-                </div>
+                </Link>
 
                 <div className="flex flex-col gap-2.5">
                   <a

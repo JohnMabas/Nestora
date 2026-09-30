@@ -8,15 +8,16 @@ import Button from "@/components/ui/Button";
 const tabs = ["Buy", "Rent", "Short Let", "Hotels"];
 
 const locations = [
-  "Lagos",
+  "Jos",
   "Abuja",
-  "Port Harcourt",
-  "Ibadan",
-  "Kano",
-  "Lekki",
-  "Ikoyi",
-  "Victoria Island",
+  "Plateau State",
   "Maitama",
+  "Wuse 2",
+  "Asokoro",
+  "Gwarinpa",
+  "Rayfield",
+  "Jos North",
+  "Jos South",
 ];
 
 const propertyTypes = [
@@ -203,7 +204,7 @@ export default function PropertySearch() {
           {/* Quick filters */}
           <div className="mt-4 flex flex-wrap items-center gap-2">
             <span className="text-xs text-[var(--color-text-muted)]">Popular:</span>
-            {["Lagos Apartments", "Abuja Villas", "Victoria Island", "Luxury Penthouses"].map((tag) => (
+            {["Jos Villas", "Abuja Apartments", "Maitama", "Rayfield Resort Area"].map((tag) => (
               <button
                 key={tag}
                 type="button"

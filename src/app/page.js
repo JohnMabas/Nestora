@@ -9,9 +9,9 @@ import Testimonials        from "@/components/home/Testimonials";
 import CTA                 from "@/components/home/CTA";
 
 export const metadata = {
-  title: "EstateOne — Premium Real Estate & Hotel Booking in Nigeria",
+  title: "Elgaa Real Estate — Premium Properties & Hotel Booking in Jos & Abuja",
   description:
-    "Discover luxury properties for sale and rent, and book Nigeria's finest hotels — all on one beautifully curated platform.",
+    "Discover luxury properties for sale and rent, and book the finest hotels in Jos Plateau and Abuja — all on one beautifully curated platform.",
 };
 
 export default function HomePage() {

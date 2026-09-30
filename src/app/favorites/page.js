@@ -4,7 +4,7 @@ import FavoritesContent from "@/components/shared/FavoritesContent";
 
 export const metadata = {
   title: "Saved — My Favourites",
-  description: "View and manage your saved properties and hotels on EstateOne.",
+  description: "View and manage your saved properties and hotels on Elgaa Real Estate.",
 };
 
 export default function FavoritesPage() {

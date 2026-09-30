@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Container from "@/components/ui/Container";
 
 const footerLinks = {
@@ -10,9 +13,9 @@ const footerLinks = {
     { label: "Luxury Homes",    href: "/properties?type=villa" },
   ],
   Hotels: [
-    { label: "Lagos",           href: "/hotels?destination=lagos" },
+    { label: "Jos",             href: "/hotels?destination=jos" },
     { label: "Abuja",           href: "/hotels?destination=abuja" },
-    { label: "Port Harcourt",   href: "/hotels?destination=port+harcourt" },
+    { label: "Jos Plateau",     href: "/hotels?destination=plateau" },
     { label: "Boutique Hotels", href: "/hotels?type=boutique" },
     { label: "Resorts",         href: "/hotels?type=resort" },
   ],
@@ -33,6 +36,12 @@ const footerLinks = {
 };
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  // Hide footer on dashboard pages (own shell) and auth pages (clean layout)
+  const hideOnRoutes = ["/agent/dashboard", "/login", "/register", "/agent/login", "/agent/register"];
+  if (hideOnRoutes.some((r) => pathname.startsWith(r))) return null;
+
   return (
     <footer className="border-t border-[var(--color-border)] bg-[var(--color-surface-0)]" role="contentinfo">
       {/* Main footer */}
@@ -40,24 +49,24 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-5">
           {/* Brand column */}
           <div className="lg:col-span-2 flex flex-col gap-5">
-            <Link href="/" className="flex items-center gap-2.5 w-fit" aria-label="EstateOne — home">
+            <Link href="/" className="flex items-center gap-2.5 w-fit" aria-label="Elgaa Real Estate — home">
               <span className="flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-brand)] font-bold text-[var(--color-text-inverse)] text-sm tracking-wide">
-                E1
+                EG
               </span>
               <span className="text-[var(--color-text-primary)] font-semibold text-lg tracking-tight">
-                Estate<span className="text-[var(--color-brand)]">One</span>
+                Elgaa<span className="text-[var(--color-brand)]"> Real Estate</span>
               </span>
             </Link>
 
             <p className="text-sm leading-relaxed text-[var(--color-text-secondary)] max-w-xs">
-              Nigeria's premier real-estate and hotel discovery platform. Find your perfect property or ideal hotel stay — all in one place.
+              Nigeria&apos;s premier real-estate and hotel discovery platform serving Jos Plateau and Abuja. Find your perfect property or ideal hotel stay — all in one place.
             </p>
 
             {/* Contact info */}
             <div className="flex flex-col gap-2 text-sm text-[var(--color-text-muted)]">
-              <span>hello@estateone.ng</span>
-              <span>+234 700 ESTATE (378283)</span>
-              <span>Victoria Island, Lagos · Maitama, Abuja</span>
+              <span>hello@elgaa.ng</span>
+              <span>+234 700 ELGAA (35422)</span>
+              <span>Jos, Plateau State · Maitama, Abuja</span>
             </div>
 
             {/* Social links */}
@@ -103,7 +112,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="border-t border-[var(--color-border)]">
         <Container className="flex flex-col gap-3 py-6 text-xs text-[var(--color-text-muted)] sm:flex-row sm:items-center sm:justify-between">
-          <span>© {new Date().getFullYear()} EstateOne. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} Elgaa Real Estate. All rights reserved.</span>
           <div className="flex items-center gap-4">
             <Link href="/privacy" className="hover:text-[var(--color-brand)] transition-colors">Privacy</Link>
             <Link href="/terms"   className="hover:text-[var(--color-brand)] transition-colors">Terms</Link>

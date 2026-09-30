@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, startTransition } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
@@ -14,11 +14,13 @@ export default function BookingConfirmation() {
   const [loaded,  setLoaded]  = useState(false);
 
   useEffect(() => {
-    try {
-      const raw = sessionStorage.getItem("estateone_booking");
-      if (raw) setBooking(JSON.parse(raw));
-    } catch (_) {}
-    setLoaded(true);
+    startTransition(() => {
+      try {
+        const raw = sessionStorage.getItem("elgaa_booking");
+        if (raw) setBooking(JSON.parse(raw));
+      } catch (_) {}
+      setLoaded(true);
+    });
   }, []);
 
   if (!loaded) {

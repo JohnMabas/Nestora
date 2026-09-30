@@ -19,7 +19,7 @@ export default function RecentProperties() {
             id="recent-heading"
             eyebrow="Just Added"
             title="Recent Properties"
-            subtitle="Freshly listed across Lagos, Abuja, and beyond. Be the first to enquire."
+            subtitle="Freshly listed across Jos Plateau and Abuja. Be the first to enquire."
           />
           <Button href="/properties?sort=newest" variant="outline" size="sm" className="shrink-0 self-start sm:self-auto">
             View All Properties

@@ -106,7 +106,7 @@ export default function BookingForm({ hotel, room }) {
 
     // Persist to sessionStorage so the confirmation page can read it
     try {
-      sessionStorage.setItem("estateone_booking", JSON.stringify(booking));
+      sessionStorage.setItem("elgaa_booking", JSON.stringify(booking));
     } catch (_) {}
 
     // Simulate brief processing

@@ -74,7 +74,7 @@ export default function FavoritesContent() {
         <div className="grid grid-cols-2 gap-3 text-sm">
           {[
             { label: "Villas for sale", href: "/properties?type=villa&listingType=sale" },
-            { label: "Lagos apartments", href: "/properties?location=Lagos&type=apartment" },
+            { label: "Jos apartments", href: "/properties?location=Jos&type=apartment" },
             { label: "5★ Hotels",        href: "/hotels?minRating=5" },
             { label: "Abuja hotels",     href: "/hotels?destination=Abuja" },
           ].map(({ label, href }) => (

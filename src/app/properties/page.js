@@ -8,7 +8,7 @@ import { getProperties } from "@/lib/data/index";
 export const metadata = {
   title: "Properties — Browse Real Estate Listings",
   description:
-    "Explore premium properties for sale, rent, and short-let across Lagos, Abuja, and beyond.",
+    "Explore premium properties for sale, rent, and short-let across Jos Plateau and Abuja, Nigeria.",
 };
 
 export default async function PropertiesPage({ searchParams }) {

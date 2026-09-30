@@ -57,9 +57,9 @@ export default function WhyChooseUs() {
           {/* Left: heading */}
           <div className="lg:w-80 shrink-0">
             <SectionHeading
-              eyebrow="Why EstateOne"
+              eyebrow="Why Elgaa Real Estate"
               title="The smarter way to find property."
-              subtitle="We combine the depth of a specialist real-estate agency with the convenience of a modern booking platform."
+              subtitle="We combine the depth of a specialist real-estate agency with the convenience of a modern booking platform — right here in Jos Plateau and Abuja."
               id="why-heading"
             />
 

@@ -5,10 +5,10 @@ import Button from "@/components/ui/Button";
 import { getFeaturedHotels } from "@/lib/data/index";
 
 const destinations = [
-  { name: "Lagos",          image: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600&q=80", hotelCount: "42 hotels" },
+  { name: "Jos",            image: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600&q=80", hotelCount: "24 hotels" },
   { name: "Abuja",          image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=600&q=80", hotelCount: "31 hotels" },
-  { name: "Port Harcourt",  image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&q=80", hotelCount: "18 hotels" },
-  { name: "Ibadan",         image: "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=600&q=80", hotelCount: "9 hotels" },
+  { name: "Plateau State",  image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&q=80", hotelCount: "12 hotels" },
+  { name: "Maitama",        image: "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=600&q=80", hotelCount: "9 hotels" },
 ];
 
 import Image from "next/image";
@@ -27,7 +27,7 @@ export default function HotelDiscovery() {
               id="destinations-heading"
               eyebrow="Hotel Stays"
               title="Popular Destinations"
-              subtitle="Top hotel cities across Nigeria — find your ideal stay."
+              subtitle="Top hotel destinations across Jos Plateau and Abuja — find your ideal stay."
             />
             <Button href="/hotels" variant="outline" size="sm" className="shrink-0 self-start sm:self-auto">
               Browse All Hotels
