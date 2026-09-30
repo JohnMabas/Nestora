@@ -3,6 +3,7 @@ import Link from "next/link";
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Button from "@/components/ui/Button";
+import FadeInOnScroll from "@/components/ui/FadeInOnScroll";
 
 export const metadata = {
   title: "About Us — Elgaa Real Estate",
@@ -11,10 +12,10 @@ export const metadata = {
 };
 
 const stats = [
-  { value: "2,400+", label: "Properties Listed" },
-  { value: "340+",   label: "Hotels Available" },
+  { value: "2,400+",  label: "Properties Listed" },
+  { value: "340+",    label: "Hotels Available" },
   { value: "18,000+", label: "Happy Clients" },
-  { value: "12",     label: "Years in Business" },
+  { value: "12",      label: "Years in Business" },
 ];
 
 const milestones = [
@@ -82,7 +83,11 @@ const team = [
 export default function AboutPage() {
   return (
     <div className="min-h-screen">
+
       {/* ── Hero ─────────────────────────────────────────── */}
+      {/* No FadeInOnScroll on the static hero image — hero content fades via
+          the page-load pattern only on the home page. Static inner-page heroes
+          appear immediately, which is the right behaviour. */}
       <section className="relative pt-32 pb-24 overflow-hidden" aria-label="About hero">
         <div className="absolute inset-0 z-0" aria-hidden="true">
           <Image
@@ -127,11 +132,11 @@ export default function AboutPage() {
       <section className="border-y border-[var(--color-border)] bg-[var(--color-surface-0)]" aria-label="Key statistics">
         <Container>
           <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-[var(--color-border)]">
-            {stats.map((stat) => (
-              <div key={stat.label} className="flex flex-col items-center gap-1 py-8 px-6 text-center">
+            {stats.map((stat, i) => (
+              <FadeInOnScroll key={stat.label} index={i} className="flex flex-col items-center gap-1 py-8 px-6 text-center">
                 <span className="text-3xl font-bold tracking-tight text-[var(--color-brand)]">{stat.value}</span>
                 <span className="text-sm text-[var(--color-text-muted)]">{stat.label}</span>
-              </div>
+              </FadeInOnScroll>
             ))}
           </div>
         </Container>
@@ -140,7 +145,7 @@ export default function AboutPage() {
       {/* ── Mission ─────────────────────────────────────── */}
       <section className="section bg-[var(--color-surface-1)]" aria-labelledby="mission-heading">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <FadeInOnScroll className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
               <SectionHeading
                 eyebrow="Our Mission"
@@ -160,7 +165,6 @@ export default function AboutPage() {
                 </p>
               </div>
             </div>
-
             <div className="relative aspect-[4/3] rounded-[var(--radius-2xl)] overflow-hidden">
               <Image
                 src="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?w=800&q=80"
@@ -171,33 +175,34 @@ export default function AboutPage() {
               />
               <div className="absolute inset-0 img-overlay-bottom" aria-hidden="true" />
             </div>
-          </div>
+          </FadeInOnScroll>
         </Container>
       </section>
 
       {/* ── Our Values ───────────────────────────────────── */}
       <section className="section bg-[var(--color-surface-2)]" aria-labelledby="values-heading">
         <Container>
-          <SectionHeading
-            eyebrow="What We Stand For"
-            title="Our Values"
-            subtitle="The principles that guide every interaction, decision, and transaction at Elgaa."
-            align="center"
-            className="mx-auto mb-12 max-w-xl"
-            id="values-heading"
-          />
+          <FadeInOnScroll>
+            <SectionHeading
+              eyebrow="What We Stand For"
+              title="Our Values"
+              subtitle="The principles that guide every interaction, decision, and transaction at Elgaa."
+              align="center"
+              className="mx-auto mb-12 max-w-xl"
+              id="values-heading"
+            />
+          </FadeInOnScroll>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {values.map((value) => (
-              <div
-                key={value.title}
-                className="flex flex-col gap-4 rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-surface-3)] p-6 hover:border-[var(--color-brand)]/40 transition-colors"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-brand)]/10 text-[var(--color-brand)]">
-                  {value.icon}
+            {values.map((value, i) => (
+              <FadeInOnScroll key={value.title} index={i}>
+                <div className="flex flex-col gap-4 rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-surface-3)] p-6 hover:border-[var(--color-brand)]/40 transition-colors h-full">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-brand)]/10 text-[var(--color-brand)]">
+                    {value.icon}
+                  </div>
+                  <h3 className="font-semibold text-[var(--color-text-primary)]">{value.title}</h3>
+                  <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">{value.description}</p>
                 </div>
-                <h3 className="font-semibold text-[var(--color-text-primary)]">{value.title}</h3>
-                <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">{value.description}</p>
-              </div>
+              </FadeInOnScroll>
             ))}
           </div>
         </Container>
@@ -206,13 +211,15 @@ export default function AboutPage() {
       {/* ── Our Journey ──────────────────────────────────── */}
       <section className="section bg-[var(--color-surface-1)]" aria-labelledby="journey-heading">
         <Container>
-          <SectionHeading
-            eyebrow="Our Journey"
-            title="12 years building something special"
-            subtitle="From a small Jos office to Nigeria's most trusted property platform — here's how we got here."
-            id="journey-heading"
-            className="mb-12"
-          />
+          <FadeInOnScroll>
+            <SectionHeading
+              eyebrow="Our Journey"
+              title="12 years building something special"
+              subtitle="From a small Jos office to Nigeria's most trusted property platform — here's how we got here."
+              id="journey-heading"
+              className="mb-12"
+            />
+          </FadeInOnScroll>
 
           <div className="relative">
             {/* Vertical line */}
@@ -220,10 +227,9 @@ export default function AboutPage() {
               className="absolute left-6 top-0 bottom-0 w-px bg-[var(--color-border)]"
               aria-hidden="true"
             />
-
             <ol className="space-y-10" aria-label="Company milestones">
-              {milestones.map((milestone) => (
-                <li key={milestone.year} className="relative flex gap-8 pl-16">
+              {milestones.map((milestone, i) => (
+                <FadeInOnScroll key={milestone.year} as="li" index={i} className="relative flex gap-8 pl-16">
                   {/* Circle marker */}
                   <div
                     className="absolute left-0 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-[var(--color-brand)] bg-[var(--color-surface-1)] text-xs font-bold text-[var(--color-brand)]"
@@ -235,7 +241,7 @@ export default function AboutPage() {
                     <h3 className="font-semibold text-[var(--color-text-primary)] mb-1">{milestone.title}</h3>
                     <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">{milestone.description}</p>
                   </div>
-                </li>
+                </FadeInOnScroll>
               ))}
             </ol>
           </div>
@@ -245,7 +251,7 @@ export default function AboutPage() {
       {/* ── Leadership Team ───────────────────────────────── */}
       <section className="section bg-[var(--color-surface-0)]" aria-labelledby="team-heading">
         <Container>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-12">
+          <FadeInOnScroll className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-12">
             <SectionHeading
               eyebrow="The Team"
               title="Meet our leadership"
@@ -255,39 +261,38 @@ export default function AboutPage() {
             <Button href="/agents" variant="outline" size="sm" className="shrink-0 self-start sm:self-auto">
               View All Agents
             </Button>
-          </div>
+          </FadeInOnScroll>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {team.map((member) => (
-              <div
-                key={member.name}
-                className="flex flex-col rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-surface-2)] overflow-hidden hover:border-[var(--color-brand)]/40 transition-colors"
-              >
-                <div className="relative aspect-square overflow-hidden">
-                  <Image
-                    src={member.image}
-                    alt={member.name}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-0 img-overlay-bottom" aria-hidden="true" />
-                  <div className="absolute bottom-3 left-3">
-                    <span className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface-0)]/70 px-2 py-0.5 text-xs text-[var(--color-text-muted)] backdrop-blur-sm">
-                      {member.city}
-                    </span>
+            {team.map((member, i) => (
+              <FadeInOnScroll key={member.name} index={i}>
+                <div className="flex flex-col rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-surface-2)] overflow-hidden hover:border-[var(--color-brand)]/40 transition-colors h-full">
+                  <div className="relative aspect-square overflow-hidden">
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 img-overlay-bottom" aria-hidden="true" />
+                    <div className="absolute bottom-3 left-3">
+                      <span className="rounded-full border border-[var(--color-border)] bg-[var(--color-surface-0)]/70 px-2 py-0.5 text-xs text-[var(--color-text-muted)] backdrop-blur-sm">
+                        {member.city}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2 p-4">
+                    <div>
+                      <h3 className="font-semibold text-[var(--color-text-primary)]">{member.name}</h3>
+                      <p className="text-sm text-[var(--color-brand)]">{member.role}</p>
+                    </div>
+                    <p className="text-xs text-[var(--color-text-muted)] leading-relaxed line-clamp-3">
+                      {member.bio}
+                    </p>
                   </div>
                 </div>
-                <div className="flex flex-col gap-2 p-4">
-                  <div>
-                    <h3 className="font-semibold text-[var(--color-text-primary)]">{member.name}</h3>
-                    <p className="text-sm text-[var(--color-brand)]">{member.role}</p>
-                  </div>
-                  <p className="text-xs text-[var(--color-text-muted)] leading-relaxed line-clamp-3">
-                    {member.bio}
-                  </p>
-                </div>
-              </div>
+              </FadeInOnScroll>
             ))}
           </div>
         </Container>
@@ -296,7 +301,7 @@ export default function AboutPage() {
       {/* ── CTA Band ──────────────────────────────────────── */}
       <section className="section bg-[var(--color-brand)]" aria-label="Contact call to action">
         <Container>
-          <div className="flex flex-col items-center text-center gap-6">
+          <FadeInOnScroll className="flex flex-col items-center text-center gap-6">
             <h2 className="text-3xl font-bold tracking-tight text-[var(--color-text-inverse)] sm:text-4xl">
               Ready to find your perfect place?
             </h2>
@@ -317,9 +322,10 @@ export default function AboutPage() {
                 Browse Properties
               </Link>
             </div>
-          </div>
+          </FadeInOnScroll>
         </Container>
       </section>
+
     </div>
   );
 }

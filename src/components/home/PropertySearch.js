@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
+import FadeInOnScroll from "@/components/ui/FadeInOnScroll";
 
 const tabs = ["Buy", "Rent", "Short Let", "Hotels"];
 
@@ -79,6 +80,7 @@ export default function PropertySearch() {
       className="relative z-20 -mt-2 pb-6"
     >
       <Container>
+        <FadeInOnScroll>
         <div className="rounded-[var(--radius-2xl)] border border-[var(--color-border)] bg-[var(--color-surface-2)] p-6 shadow-2xl shadow-black/40">
           {/* Tabs */}
           <div className="flex items-center gap-1 mb-6 p-1 bg-[var(--color-surface-3)] rounded-[var(--radius-lg)] w-fit">
@@ -219,6 +221,7 @@ export default function PropertySearch() {
             ))}
           </div>
         </div>
+        </FadeInOnScroll>
       </Container>
     </section>
   );

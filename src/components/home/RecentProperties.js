@@ -2,6 +2,7 @@ import PropertyCard from "@/components/properties/PropertyCard";
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Button from "@/components/ui/Button";
+import FadeInOnScroll from "@/components/ui/FadeInOnScroll";
 import { getRecentProperties } from "@/lib/data/index";
 
 export default function RecentProperties() {
@@ -14,7 +15,7 @@ export default function RecentProperties() {
     >
       <Container>
         {/* Header row */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-10">
+        <FadeInOnScroll className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-10">
           <SectionHeading
             id="recent-heading"
             eyebrow="Just Added"
@@ -25,12 +26,14 @@ export default function RecentProperties() {
             View All Properties
             <ArrowRight />
           </Button>
-        </div>
+        </FadeInOnScroll>
 
-        {/* 4-column grid — 2 on tablet, 1 on mobile */}
+        {/* 4-column grid — each card fades in with a stagger */}
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
-          {properties.map((property) => (
-            <PropertyCard key={property.id} property={property} />
+          {properties.map((property, i) => (
+            <FadeInOnScroll key={property.id} index={i}>
+              <PropertyCard property={property} />
+            </FadeInOnScroll>
           ))}
         </div>
       </Container>

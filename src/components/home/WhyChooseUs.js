@@ -1,5 +1,6 @@
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
+import FadeInOnScroll from "@/components/ui/FadeInOnScroll";
 
 const reasons = [
   {
@@ -55,7 +56,7 @@ export default function WhyChooseUs() {
       <Container className="relative">
         <div className="flex flex-col lg:flex-row gap-16 items-start">
           {/* Left: heading */}
-          <div className="lg:w-80 shrink-0">
+          <FadeInOnScroll className="lg:w-80 shrink-0">
             <SectionHeading
               eyebrow="Why Elgaa Real Estate"
               title="The smarter way to find property."
@@ -77,25 +78,26 @@ export default function WhyChooseUs() {
                 </div>
               ))}
             </div>
-          </div>
+          </FadeInOnScroll>
 
-          {/* Right: reasons grid */}
+          {/* Right: reasons grid — each reason card fades in with stagger */}
           <div className="flex-1 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {reasons.map((reason, i) => (
-              <div
-                key={reason.title}
-                className="flex flex-col gap-3 rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-surface-3)] p-5 hover:border-[var(--color-brand)]/40 transition-colors"
-              >
-                <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-brand)]/10 text-[var(--color-brand)]">
-                  {reason.icon}
+              <FadeInOnScroll key={reason.title} index={i}>
+                <div
+                  className="flex flex-col gap-3 rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-surface-3)] p-5 hover:border-[var(--color-brand)]/40 transition-colors h-full"
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-brand)]/10 text-[var(--color-brand)]">
+                    {reason.icon}
+                  </div>
+                  <h3 className="font-semibold text-[var(--color-text-primary)] text-sm leading-snug">
+                    {reason.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">
+                    {reason.description}
+                  </p>
                 </div>
-                <h3 className="font-semibold text-[var(--color-text-primary)] text-sm leading-snug">
-                  {reason.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-[var(--color-text-secondary)]">
-                  {reason.description}
-                </p>
-              </div>
+              </FadeInOnScroll>
             ))}
           </div>
         </div>

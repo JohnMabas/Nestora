@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Container from "@/components/ui/Container";
+import FadeInOnScroll from "@/components/ui/FadeInOnScroll";
 
 const footerLinks = {
   Properties: [
@@ -46,7 +47,8 @@ export default function Footer() {
     <footer className="border-t border-[var(--color-border)] bg-[var(--color-surface-0)]" role="contentinfo">
       {/* Main footer */}
       <Container className="py-16">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-5">
+        <FadeInOnScroll>
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-5">
           {/* Brand column */}
           <div className="lg:col-span-2 flex flex-col gap-5">
             <Link href="/" className="flex items-center gap-2.5 w-fit" aria-label="Elgaa Real Estate — home">
@@ -107,6 +109,7 @@ export default function Footer() {
             </div>
           ))}
         </div>
+        </FadeInOnScroll>
       </Container>
 
       {/* Bottom bar */}

@@ -2,6 +2,7 @@ import HotelCard from "@/components/hotels/HotelCard";
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Button from "@/components/ui/Button";
+import FadeInOnScroll from "@/components/ui/FadeInOnScroll";
 import { getFeaturedHotels } from "@/lib/data/index";
 
 const destinations = [
@@ -22,7 +23,7 @@ export default function HotelDiscovery() {
       {/* Popular Destinations */}
       <section aria-labelledby="destinations-heading" className="section bg-[var(--color-surface-0)]">
         <Container>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-10">
+          <FadeInOnScroll className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-10">
             <SectionHeading
               id="destinations-heading"
               eyebrow="Hotel Stays"
@@ -33,29 +34,30 @@ export default function HotelDiscovery() {
               Browse All Hotels
               <ArrowRight />
             </Button>
-          </div>
+          </FadeInOnScroll>
 
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {destinations.map((dest) => (
-              <Link
-                key={dest.name}
-                href={`/hotels?destination=${encodeURIComponent(dest.name.toLowerCase())}`}
-                className="group relative flex overflow-hidden rounded-[var(--radius-xl)] border border-[var(--color-border)] aspect-[3/4] hover:border-[var(--color-brand)] transition-colors focus-visible:outline-2 focus-visible:outline-[var(--color-brand)]"
-                aria-label={`Hotels in ${dest.name}`}
-              >
-                <Image
-                  src={dest.image}
-                  alt={`${dest.name} cityscape`}
-                  fill
-                  sizes="(max-width: 640px) 50vw, 25vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-surface-0)]/90 via-[var(--color-surface-0)]/20 to-transparent" aria-hidden="true" />
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <p className="font-semibold text-[var(--color-text-primary)]">{dest.name}</p>
-                  <p className="text-sm text-[var(--color-text-muted)] mt-0.5">{dest.hotelCount}</p>
-                </div>
-              </Link>
+            {destinations.map((dest, i) => (
+              <FadeInOnScroll key={dest.name} index={i}>
+                <Link
+                  href={`/hotels?destination=${encodeURIComponent(dest.name.toLowerCase())}`}
+                  className="group relative flex overflow-hidden rounded-[var(--radius-xl)] border border-[var(--color-border)] aspect-[3/4] hover:border-[var(--color-brand)] transition-colors focus-visible:outline-2 focus-visible:outline-[var(--color-brand)]"
+                  aria-label={`Hotels in ${dest.name}`}
+                >
+                  <Image
+                    src={dest.image}
+                    alt={`${dest.name} cityscape`}
+                    fill
+                    sizes="(max-width: 640px) 50vw, 25vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-surface-0)]/90 via-[var(--color-surface-0)]/20 to-transparent" aria-hidden="true" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <p className="font-semibold text-[var(--color-text-primary)]">{dest.name}</p>
+                    <p className="text-sm text-[var(--color-text-muted)] mt-0.5">{dest.hotelCount}</p>
+                  </div>
+                </Link>
+              </FadeInOnScroll>
             ))}
           </div>
         </Container>
@@ -64,7 +66,7 @@ export default function HotelDiscovery() {
       {/* Featured Hotels */}
       <section aria-labelledby="featured-hotels-heading" className="section bg-[var(--color-surface-1)]">
         <Container>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-10">
+          <FadeInOnScroll className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-10">
             <SectionHeading
               id="featured-hotels-heading"
               eyebrow="Top Picks"
@@ -75,11 +77,13 @@ export default function HotelDiscovery() {
               View All
               <ArrowRight />
             </Button>
-          </div>
+          </FadeInOnScroll>
 
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {featuredHotels.map((hotel) => (
-              <HotelCard key={hotel.id} hotel={hotel} />
+            {featuredHotels.map((hotel, i) => (
+              <FadeInOnScroll key={hotel.id} index={i}>
+                <HotelCard hotel={hotel} />
+              </FadeInOnScroll>
             ))}
           </div>
         </Container>

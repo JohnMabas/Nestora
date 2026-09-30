@@ -5,6 +5,7 @@ import Image from "next/image";
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Button from "@/components/ui/Button";
+import FadeInOnScroll from "@/components/ui/FadeInOnScroll";
 
 export default function ContactPage() {
   return (
@@ -45,7 +46,7 @@ export default function ContactPage() {
       {/* ── Contact content ──────────────────────────────────── */}
       <section className="section bg-[var(--color-surface-1)]" aria-labelledby="contact-heading">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+          <FadeInOnScroll className="grid grid-cols-1 lg:grid-cols-5 gap-12">
             {/* ── Form ─── */}
             <div className="lg:col-span-3">
               <SectionHeading
@@ -113,20 +114,22 @@ export default function ContactPage() {
                 </ul>
               </div>
             </aside>
-          </div>
+          </FadeInOnScroll>
         </Container>
       </section>
 
       {/* ── Map placeholder ────────────────────────────────── */}
       <section className="pb-24" aria-label="Office location">
         <Container>
-          <div className="rounded-[var(--radius-2xl)] border border-[var(--color-border)] bg-[var(--color-surface-2)] overflow-hidden">
-            <div className="flex items-center justify-center h-72 text-center flex-col gap-3 text-[var(--color-text-muted)]">
-              <MapIcon />
-              <p className="text-sm font-medium text-[var(--color-text-secondary)]">Interactive map coming soon</p>
-              <p className="text-xs">12 Hill Station Road, Jos North · 5 Adetokunbo Ademola Crescent, Maitama</p>
+          <FadeInOnScroll>
+            <div className="rounded-[var(--radius-2xl)] border border-[var(--color-border)] bg-[var(--color-surface-2)] overflow-hidden">
+              <div className="flex items-center justify-center h-72 text-center flex-col gap-3 text-[var(--color-text-muted)]">
+                <MapIcon />
+                <p className="text-sm font-medium text-[var(--color-text-secondary)]">Interactive map coming soon</p>
+                <p className="text-xs">12 Hill Station Road, Jos North · 5 Adetokunbo Ademola Crescent, Maitama</p>
+              </div>
             </div>
-          </div>
+          </FadeInOnScroll>
         </Container>
       </section>
     </div>

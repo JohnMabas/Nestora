@@ -2,6 +2,7 @@ import PropertyCard from "@/components/properties/PropertyCard";
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Button from "@/components/ui/Button";
+import FadeInOnScroll from "@/components/ui/FadeInOnScroll";
 import { getFeaturedProperties } from "@/lib/data/index";
 
 export default function FeaturedProperties() {
@@ -11,7 +12,7 @@ export default function FeaturedProperties() {
     <section aria-labelledby="featured-heading" className="section bg-[var(--color-surface-1)]">
       <Container>
         {/* Header row */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-10">
+        <FadeInOnScroll className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between mb-10">
           <SectionHeading
             id="featured-heading"
             eyebrow="Handpicked Listings"
@@ -22,12 +23,14 @@ export default function FeaturedProperties() {
             View All
             <ArrowRight />
           </Button>
-        </div>
+        </FadeInOnScroll>
 
-        {/* Grid */}
+        {/* Grid — each card fades in with a stagger */}
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {properties.map((property) => (
-            <PropertyCard key={property.id} property={property} />
+          {properties.map((property, i) => (
+            <FadeInOnScroll key={property.id} index={i}>
+              <PropertyCard property={property} />
+            </FadeInOnScroll>
           ))}
         </div>
       </Container>
