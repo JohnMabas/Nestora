@@ -6,39 +6,78 @@ import { useRouter } from "next/navigation";
 import { useAgentAuth } from "@/context/AgentAuthContext";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
+import {
+  validateName,
+  validateEmail,
+  validatePhone,
+  validateAgencyName,
+  validateLicenseNumber,
+  validatePassword,
+  validateConfirmPassword,
+  validateTerms,
+  validateRegisterForm,
+} from "@/lib/validation/authValidation";
+
+// Map each field to its individual validator so blur can re-check just that field
+const FIELD_VALIDATORS = {
+  name:            (f) => validateName(f.name),
+  email:           (f) => validateEmail(f.email),
+  phone:           (f) => validatePhone(f.phone),
+  agencyName:      (f) => validateAgencyName(f.agencyName),
+  licenseNumber:   (f) => validateLicenseNumber(f.licenseNumber),
+  password:        (f) => validatePassword(f.password),
+  confirmPassword: (f) => validateConfirmPassword(f.password, f.confirmPassword),
+  terms:           (f) => validateTerms(f.terms),
+};
 
 export default function AgentRegisterPage() {
   const router = useRouter();
   const { register } = useAgentAuth();
 
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    agencyName: "",
-    licenseNumber: "",
-    password: "",
-    confirmPassword: "",
-    terms: false,
+    name: "", email: "", phone: "", agencyName: "",
+    licenseNumber: "", password: "", confirmPassword: "", terms: false,
   });
-  const [showPw,  setShowPw]  = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error,   setError]   = useState("");
+  const [showPw,      setShowPw]      = useState(false);
+  const [loading,     setLoading]     = useState(false);
+  const [serverError, setServerError] = useState("");
+  const [touched,     setTouched]     = useState({});
+  const [fieldErrors, setFieldErrors] = useState({});
+
+  const updateField = (key, value) => {
+    const next = { ...form, [key]: value };
+    setForm(next);
+    // Re-validate on change only if the field was already touched
+    if (touched[key]) {
+      const err = FIELD_VALIDATORS[key]?.(next);
+      setFieldErrors((prev) => ({ ...prev, [key]: err ?? null }));
+    }
+    // When password changes, also re-check confirmPassword if touched
+    if (key === "password" && touched.confirmPassword) {
+      const err = validateConfirmPassword(value, next.confirmPassword);
+      setFieldErrors((prev) => ({ ...prev, confirmPassword: err ?? null }));
+    }
+  };
 
   const set = (key) => (e) =>
-    setForm((prev) => ({
-      ...prev,
-      [key]: e.target.type === "checkbox" ? e.target.checked : e.target.value,
-    }));
+    updateField(key, e.target.type === "checkbox" ? e.target.checked : e.target.value);
+
+  const handleBlur = (key) => {
+    setTouched((prev) => ({ ...prev, [key]: true }));
+    const err = FIELD_VALIDATORS[key]?.(form);
+    setFieldErrors((prev) => ({ ...prev, [key]: err ?? null }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setServerError("");
 
-    if (!form.terms) {
-      setError("You must accept the terms and conditions.");
-      return;
-    }
+    // Touch all fields and run full validation
+    const allTouched = Object.fromEntries(Object.keys(form).map((k) => [k, true]));
+    setTouched(allTouched);
+    const errs = validateRegisterForm(form);
+    setFieldErrors(errs);
+    if (Object.keys(errs).length > 0) return;
 
     setLoading(true);
     const result = await register(form);
@@ -47,16 +86,28 @@ export default function AgentRegisterPage() {
     if (result.ok) {
       router.push("/agent/dashboard");
     } else {
-      setError(result.error || "Registration failed. Please try again.");
+      setServerError(result.error || "Registration failed. Please try again.");
     }
   };
+
+  // Helper to render a field error message
+  const FieldError = ({ name }) =>
+    fieldErrors[name] ? (
+      <p role="alert" className="text-xs text-red-400 flex items-center gap-1 mt-0.5">
+        <InlineErrorIcon /> {fieldErrors[name]}
+      </p>
+    ) : null;
+
+  // Error border class
+  const errBorder = (name) =>
+    fieldErrors[name] ? "border-red-500/60 focus:border-red-500" : "";
 
   return (
     <div className="min-h-screen flex items-center justify-center pt-24 pb-12 bg-[var(--color-surface-1)]">
       <Container>
         <div className="mx-auto w-full max-w-lg">
-          {/* Card */}
           <div className="rounded-[var(--radius-2xl)] border border-[var(--color-border)] bg-[var(--color-surface-0)] p-8 shadow-xl shadow-black/20">
+
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 mb-8 w-fit" aria-label="Elgaa Real Estate — home">
               <span className="flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-brand)] font-bold text-[var(--color-text-inverse)] text-sm tracking-wide">
@@ -83,93 +134,168 @@ export default function AgentRegisterPage() {
               </p>
             </div>
 
-            {/* Error banner */}
-            {error && (
+            {/* Server error banner */}
+            {serverError && (
               <div role="alert" className="mb-5 flex items-center gap-2.5 rounded-[var(--radius-md)] border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
                 <ErrorIcon />
-                {error}
+                {serverError}
               </div>
             )}
 
             {/* Form */}
             <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+
               {/* Full name */}
-              <Field label="Full name" htmlFor="reg-name">
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="reg-name" className="text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wide">
+                  Full name
+                </label>
                 <div className="relative">
                   <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]" aria-hidden="true"><UserIcon /></span>
-                  <input id="reg-name" type="text" autoComplete="name" required value={form.name} onChange={set("name")} placeholder="Amara Okafor" className="input-base pl-9" />
+                  <input
+                    id="reg-name" type="text" autoComplete="name"
+                    value={form.name} onChange={set("name")} onBlur={() => handleBlur("name")}
+                    placeholder="Amara Okafor"
+                    aria-invalid={!!fieldErrors.name}
+                    aria-describedby={fieldErrors.name ? "reg-name-error" : undefined}
+                    className={`input-base pl-9 ${errBorder("name")}`}
+                  />
                 </div>
-              </Field>
+                <FieldError name="name" />
+              </div>
 
               {/* Email */}
-              <Field label="Email address" htmlFor="reg-email">
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="reg-email" className="text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wide">
+                  Email address
+                </label>
                 <div className="relative">
                   <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]" aria-hidden="true"><MailIcon /></span>
-                  <input id="reg-email" type="email" autoComplete="email" required value={form.email} onChange={set("email")} placeholder="you@agency.com" className="input-base pl-9" />
+                  <input
+                    id="reg-email" type="email" autoComplete="email"
+                    value={form.email} onChange={set("email")} onBlur={() => handleBlur("email")}
+                    placeholder="you@agency.com"
+                    aria-invalid={!!fieldErrors.email}
+                    aria-describedby={fieldErrors.email ? "reg-email-error" : undefined}
+                    className={`input-base pl-9 ${errBorder("email")}`}
+                  />
                 </div>
-              </Field>
+                <FieldError name="email" />
+              </div>
 
               {/* Phone */}
-              <Field label="Phone number" htmlFor="reg-phone">
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="reg-phone" className="text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wide">
+                  Phone number
+                </label>
                 <div className="relative">
                   <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]" aria-hidden="true"><PhoneIcon /></span>
-                  <input id="reg-phone" type="tel" autoComplete="tel" required value={form.phone} onChange={set("phone")} placeholder="+234 800 000 0000" className="input-base pl-9" />
+                  <input
+                    id="reg-phone" type="tel" autoComplete="tel"
+                    value={form.phone} onChange={set("phone")} onBlur={() => handleBlur("phone")}
+                    placeholder="+234 800 000 0000"
+                    aria-invalid={!!fieldErrors.phone}
+                    aria-describedby={fieldErrors.phone ? "reg-phone-error" : undefined}
+                    className={`input-base pl-9 ${errBorder("phone")}`}
+                  />
                 </div>
-              </Field>
+                <FieldError name="phone" />
+              </div>
 
-              {/* Two-col row for agency + license */}
+              {/* Agency + License row */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <Field label="Agency / Brokerage" htmlFor="reg-agency">
-                  <input id="reg-agency" type="text" required value={form.agencyName} onChange={set("agencyName")} placeholder="Elgaa Premium Realty" className="input-base" />
-                </Field>
-                <Field label="License number" htmlFor="reg-license">
-                  <input id="reg-license" type="text" required value={form.licenseNumber} onChange={set("licenseNumber")} placeholder="RE/XXX/2024/001" className="input-base" />
-                </Field>
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="reg-agency" className="text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wide">
+                    Agency / Brokerage
+                  </label>
+                  <input
+                    id="reg-agency" type="text"
+                    value={form.agencyName} onChange={set("agencyName")} onBlur={() => handleBlur("agencyName")}
+                    placeholder="Elgaa Premium Realty"
+                    aria-invalid={!!fieldErrors.agencyName}
+                    className={`input-base ${errBorder("agencyName")}`}
+                  />
+                  <FieldError name="agencyName" />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="reg-license" className="text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wide">
+                    License number
+                  </label>
+                  <input
+                    id="reg-license" type="text"
+                    value={form.licenseNumber} onChange={set("licenseNumber")} onBlur={() => handleBlur("licenseNumber")}
+                    placeholder="RE/XXX/2024/001"
+                    aria-invalid={!!fieldErrors.licenseNumber}
+                    className={`input-base ${errBorder("licenseNumber")}`}
+                  />
+                  <FieldError name="licenseNumber" />
+                </div>
               </div>
 
               {/* Password */}
-              <Field label="Password" htmlFor="reg-password">
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="reg-password" className="text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wide">
+                  Password
+                </label>
                 <div className="relative">
                   <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]" aria-hidden="true"><LockIcon /></span>
                   <input
                     id="reg-password"
                     type={showPw ? "text" : "password"}
                     autoComplete="new-password"
-                    required
-                    value={form.password}
-                    onChange={set("password")}
+                    value={form.password} onChange={set("password")} onBlur={() => handleBlur("password")}
                     placeholder="Min. 6 characters"
-                    className="input-base pl-9 pr-10"
+                    aria-invalid={!!fieldErrors.password}
+                    aria-describedby={fieldErrors.password ? "reg-password-error" : undefined}
+                    className={`input-base pl-9 pr-10 ${errBorder("password")}`}
                   />
                   <button type="button" onClick={() => setShowPw((v) => !v)} aria-label={showPw ? "Hide password" : "Show password"} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors">
                     {showPw ? <EyeOffIcon /> : <EyeIcon />}
                   </button>
                 </div>
-              </Field>
+                <FieldError name="password" />
+              </div>
 
               {/* Confirm password */}
-              <Field label="Confirm password" htmlFor="reg-confirm">
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="reg-confirm" className="text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wide">
+                  Confirm password
+                </label>
                 <div className="relative">
                   <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)]" aria-hidden="true"><LockIcon /></span>
-                  <input id="reg-confirm" type={showPw ? "text" : "password"} autoComplete="new-password" required value={form.confirmPassword} onChange={set("confirmPassword")} placeholder="Repeat password" className="input-base pl-9" />
+                  <input
+                    id="reg-confirm"
+                    type={showPw ? "text" : "password"}
+                    autoComplete="new-password"
+                    value={form.confirmPassword} onChange={set("confirmPassword")} onBlur={() => handleBlur("confirmPassword")}
+                    placeholder="Repeat password"
+                    aria-invalid={!!fieldErrors.confirmPassword}
+                    aria-describedby={fieldErrors.confirmPassword ? "reg-confirm-error" : undefined}
+                    className={`input-base pl-9 ${errBorder("confirmPassword")}`}
+                  />
                 </div>
-              </Field>
+                <FieldError name="confirmPassword" />
+              </div>
 
               {/* Terms */}
-              <label className="flex items-start gap-2.5 cursor-pointer select-none">
-                <input
-                  type="checkbox"
-                  checked={form.terms}
-                  onChange={set("terms")}
-                  className="mt-0.5 w-4 h-4 shrink-0 rounded border border-[var(--color-border)] accent-[var(--color-brand)]"
-                />
-                <span className="text-sm text-[var(--color-text-secondary)]">
-                  I agree to the{" "}
-                  <Link href="/terms" className="text-[var(--color-brand)] hover:underline">Terms of Service</Link>
-                  {" "}and{" "}
-                  <Link href="/privacy" className="text-[var(--color-brand)] hover:underline">Privacy Policy</Link>
-                </span>
-              </label>
+              <div className="flex flex-col gap-1">
+                <label className="flex items-start gap-2.5 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={form.terms}
+                    onChange={set("terms")}
+                    onBlur={() => handleBlur("terms")}
+                    className="mt-0.5 w-4 h-4 shrink-0 rounded border border-[var(--color-border)] accent-[var(--color-brand)]"
+                  />
+                  <span className="text-sm text-[var(--color-text-secondary)]">
+                    I agree to the{" "}
+                    <Link href="/terms" className="text-[var(--color-brand)] hover:underline">Terms of Service</Link>
+                    {" "}and{" "}
+                    <Link href="/privacy" className="text-[var(--color-brand)] hover:underline">Privacy Policy</Link>
+                  </span>
+                </label>
+                <FieldError name="terms" />
+              </div>
 
               {/* Submit */}
               <Button type="submit" variant="primary" size="md" className="w-full justify-center mt-1" disabled={loading}>
@@ -202,19 +328,6 @@ export default function AgentRegisterPage() {
   );
 }
 
-// ─── Field wrapper ────────────────────────────────────────────────────────────
-
-function Field({ label, htmlFor, children }) {
-  return (
-    <div className="flex flex-col gap-1.5">
-      <label htmlFor={htmlFor} className="text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wide">
-        {label}
-      </label>
-      {children}
-    </div>
-  );
-}
-
 // ─── Icons ────────────────────────────────────────────────────────────────────
 
 function AgentIcon() {
@@ -240,6 +353,9 @@ function EyeOffIcon() {
 }
 function ErrorIcon() {
   return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>;
+}
+function InlineErrorIcon() {
+  return <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>;
 }
 function Spinner() {
   return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="animate-spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>;

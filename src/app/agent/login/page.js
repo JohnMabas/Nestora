@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAgentAuth } from "@/context/AgentAuthContext";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
+import { validateLoginForm } from "@/lib/validation/authValidation";
 
 export default function AgentLoginPage() {
   const router = useRouter();
@@ -16,21 +17,58 @@ export default function AgentLoginPage() {
   const [remember, setRemember] = useState(true);
   const [showPw,   setShowPw]   = useState(false);
   const [loading,  setLoading]  = useState(false);
-  const [error,    setError]    = useState("");
+  const [serverError, setServerError] = useState("");
+
+  // Track which fields the user has interacted with
+  const [touched, setTouched] = useState({ email: false, password: false });
+  // Inline field errors — populated on blur and on submit
+  const [fieldErrors, setFieldErrors] = useState({});
+
+  // Validate a single field immediately (for blur)
+  const validateField = (name, value) => {
+    const errs = validateLoginForm({
+      email:    name === "email"    ? value : email,
+      password: name === "password" ? value : password,
+    });
+    setFieldErrors((prev) => ({
+      ...prev,
+      [name]: errs[name] ?? null,
+    }));
+  };
+
+  const handleBlur = (name, value) => {
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    validateField(name, value);
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    if (touched.email) validateField("email", e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (touched.password) validateField("password", e.target.value);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setServerError("");
+
+    // Mark all fields touched and validate everything
+    setTouched({ email: true, password: true });
+    const errs = validateLoginForm({ email, password });
+    setFieldErrors(errs);
+    if (Object.keys(errs).length > 0) return;
+
     setLoading(true);
-
     const result = await login(email, password, remember);
-
     setLoading(false);
 
     if (result.ok) {
       router.push("/agent/dashboard");
     } else {
-      setError(result.error || "Login failed. Please try again.");
+      setServerError(result.error || "Login failed. Please try again.");
     }
   };
 
@@ -38,8 +76,8 @@ export default function AgentLoginPage() {
     <div className="min-h-screen flex items-center justify-center pt-20 pb-12 bg-[var(--color-surface-1)]">
       <Container>
         <div className="mx-auto w-full max-w-md">
-          {/* Card */}
           <div className="rounded-[var(--radius-2xl)] border border-[var(--color-border)] bg-[var(--color-surface-0)] p-8 shadow-xl shadow-black/20">
+
             {/* Logo + badge */}
             <Link href="/" className="flex items-center gap-2.5 mb-8 w-fit" aria-label="Elgaa Real Estate — home">
               <span className="flex h-9 w-9 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-brand)] font-bold text-[var(--color-text-inverse)] text-sm tracking-wide">
@@ -66,16 +104,17 @@ export default function AgentLoginPage() {
               </p>
             </div>
 
-            {/* Error banner */}
-            {error && (
+            {/* Server error banner */}
+            {serverError && (
               <div role="alert" className="mb-5 flex items-center gap-2.5 rounded-[var(--radius-md)] border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
                 <ErrorIcon />
-                {error}
+                {serverError}
               </div>
             )}
 
             {/* Form */}
             <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+
               {/* Email */}
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="agent-email" className="text-xs font-medium text-[var(--color-text-secondary)] uppercase tracking-wide">
@@ -89,13 +128,23 @@ export default function AgentLoginPage() {
                     id="agent-email"
                     type="email"
                     autoComplete="email"
-                    required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={handleEmailChange}
+                    onBlur={(e) => handleBlur("email", e.target.value)}
                     placeholder="you@agency.com"
-                    className="input-base pl-9"
+                    aria-invalid={!!fieldErrors.email}
+                    aria-describedby={fieldErrors.email ? "agent-email-error" : undefined}
+                    className={[
+                      "input-base pl-9",
+                      fieldErrors.email ? "border-red-500/60 focus:border-red-500" : "",
+                    ].join(" ")}
                   />
                 </div>
+                {fieldErrors.email && (
+                  <p id="agent-email-error" role="alert" className="text-xs text-red-400 flex items-center gap-1">
+                    <InlineErrorIcon /> {fieldErrors.email}
+                  </p>
+                )}
               </div>
 
               {/* Password */}
@@ -116,11 +165,16 @@ export default function AgentLoginPage() {
                     id="agent-password"
                     type={showPw ? "text" : "password"}
                     autoComplete="current-password"
-                    required
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={handlePasswordChange}
+                    onBlur={(e) => handleBlur("password", e.target.value)}
                     placeholder="••••••••"
-                    className="input-base pl-9 pr-10"
+                    aria-invalid={!!fieldErrors.password}
+                    aria-describedby={fieldErrors.password ? "agent-password-error" : undefined}
+                    className={[
+                      "input-base pl-9 pr-10",
+                      fieldErrors.password ? "border-red-500/60 focus:border-red-500" : "",
+                    ].join(" ")}
                   />
                   <button
                     type="button"
@@ -131,6 +185,11 @@ export default function AgentLoginPage() {
                     {showPw ? <EyeOffIcon /> : <EyeIcon />}
                   </button>
                 </div>
+                {fieldErrors.password && (
+                  <p id="agent-password-error" role="alert" className="text-xs text-red-400 flex items-center gap-1">
+                    <InlineErrorIcon /> {fieldErrors.password}
+                  </p>
+                )}
               </div>
 
               {/* Remember me */}
@@ -152,11 +211,7 @@ export default function AgentLoginPage() {
                 className="w-full justify-center mt-1"
                 disabled={loading}
               >
-                {loading ? (
-                  <><Spinner /> Signing in…</>
-                ) : (
-                  "Sign in to Dashboard"
-                )}
+                {loading ? <><Spinner /> Signing in…</> : "Sign in to Dashboard"}
               </Button>
             </form>
 
@@ -167,7 +222,6 @@ export default function AgentLoginPage() {
               <div className="flex-1 h-px bg-[var(--color-border)]" />
             </div>
 
-            {/* Register link */}
             <p className="text-center text-sm text-[var(--color-text-secondary)]">
               Not yet an agent?{" "}
               <Link href="/agent/register" className="font-medium text-[var(--color-brand)] hover:underline">
@@ -175,7 +229,6 @@ export default function AgentLoginPage() {
               </Link>
             </p>
 
-            {/* Back to site */}
             <p className="text-center text-xs text-[var(--color-text-muted)] mt-4">
               <Link href="/" className="hover:text-[var(--color-text-secondary)] transition-colors">
                 ← Back to main site
@@ -207,6 +260,9 @@ function EyeOffIcon() {
 }
 function ErrorIcon() {
   return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>;
+}
+function InlineErrorIcon() {
+  return <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="shrink-0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>;
 }
 function Spinner() {
   return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="animate-spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>;
