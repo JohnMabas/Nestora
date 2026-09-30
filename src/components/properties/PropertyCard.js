@@ -2,16 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
+import { useFavorites } from "@/context/FavoritesContext";
 
 /**
  * Reusable property card.
  * @param {{ property: import('@/lib/types/index.js').Property, className?: string }} props
  */
 export default function PropertyCard({ property, className = "" }) {
-  const [saved, setSaved] = useState(false);
+  const { isPropertySaved, toggleProperty } = useFavorites();
+  const saved = isPropertySaved(property.id);
 
   const primaryImage = property.images.find((i) => i.primary) ?? property.images[0];
   const price        = formatPrice(property.price, property.currency);
@@ -57,7 +58,7 @@ export default function PropertyCard({ property, className = "" }) {
           type="button"
           aria-label={saved ? "Remove from saved" : "Save property"}
           aria-pressed={saved}
-          onClick={() => setSaved((v) => !v)}
+          onClick={(e) => { e.preventDefault(); toggleProperty(property.id); }}
           className={[
             "absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full border transition-all duration-200",
             saved

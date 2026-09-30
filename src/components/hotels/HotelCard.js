@@ -2,15 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
+import { useFavorites } from "@/context/FavoritesContext";
 
 /**
  * @param {{ hotel: import('@/lib/types/index.js').Hotel, className?: string }} props
  */
 export default function HotelCard({ hotel, className = "" }) {
-  const [saved, setSaved] = useState(false);
+  const { isHotelSaved, toggleHotel } = useFavorites();
+  const saved = isHotelSaved(hotel.id);
 
   const primaryImage = hotel.images.find((i) => i.primary) ?? hotel.images[0];
   const priceFormatted = formatPrice(hotel.priceFrom, hotel.currency);
@@ -49,7 +50,7 @@ export default function HotelCard({ hotel, className = "" }) {
           type="button"
           aria-label={saved ? "Remove from saved" : "Save hotel"}
           aria-pressed={saved}
-          onClick={() => setSaved((v) => !v)}
+          onClick={(e) => { e.preventDefault(); toggleHotel(hotel.id); }}
           className={[
             "absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full border transition-all duration-200",
             saved

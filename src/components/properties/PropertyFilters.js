@@ -1,16 +1,19 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useState, useCallback } from "react";
 import Button from "@/components/ui/Button";
 
 /**
- * @param {{ initialFilters: object }} props
+ * @param {{
+ *   initialFilters: object,
+ *   onApply?: () => void,
+ *   inDrawer?: boolean
+ * }} props
  */
-export default function PropertyFilters({ initialFilters }) {
+export default function PropertyFilters({ initialFilters, onApply, inDrawer = false }) {
   const router     = useRouter();
   const pathname   = usePathname();
-  const searchParams = useSearchParams();
 
   const [location,    setLocation]    = useState(initialFilters.location    || "");
   const [type,        setType]        = useState(initialFilters.type        || "all");
@@ -21,14 +24,15 @@ export default function PropertyFilters({ initialFilters }) {
 
   const applyFilters = useCallback(() => {
     const params = new URLSearchParams();
-    if (location)    params.set("location",    location);
-    if (type    && type    !== "all") params.set("type",        type);
+    if (location)                         params.set("location",    location);
+    if (type        && type    !== "all") params.set("type",        type);
     if (listingType && listingType !== "all") params.set("listingType", listingType);
     if (minPrice !== "") params.set("minPrice", String(minPrice));
     if (maxPrice !== "") params.set("maxPrice", String(maxPrice));
     if (minBeds  !== "") params.set("minBeds",  String(minBeds));
     router.push(`${pathname}?${params.toString()}`);
-  }, [location, type, listingType, minPrice, maxPrice, minBeds, pathname, router]);
+    onApply?.();
+  }, [location, type, listingType, minPrice, maxPrice, minBeds, pathname, router, onApply]);
 
   const clearFilters = () => {
     setLocation("");
@@ -38,26 +42,36 @@ export default function PropertyFilters({ initialFilters }) {
     setMaxPrice("");
     setMinBeds("");
     router.push(pathname);
+    onApply?.();
   };
 
   const hasFilters =
     location || type !== "all" || listingType !== "all" || minPrice !== "" || maxPrice !== "" || minBeds !== "";
 
+  const wrapperCls = inDrawer
+    ? "flex flex-col gap-5"
+    : "bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-[var(--radius-xl)] p-5 sticky top-28 flex flex-col gap-5";
+
   return (
-    <div className="bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-[var(--radius-xl)] p-5 sticky top-28">
-      <div className="flex items-center justify-between mb-5">
-        <h2 className="font-semibold text-[var(--color-text-primary)]">Filters</h2>
-        {hasFilters && (
-          <button
-            onClick={clearFilters}
-            className="text-xs text-[var(--color-brand)] hover:underline"
-          >
-            Clear all
+    <div>
+      {!inDrawer && (
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="font-semibold text-[var(--color-text-primary)]">Filters</h2>
+          {hasFilters && (
+            <button onClick={clearFilters} className="text-xs text-[var(--color-brand)] hover:underline">
+              Clear all
+            </button>
+          )}
+        </div>
+      )}
+
+      <div className={wrapperCls}>
+        {inDrawer && hasFilters && (
+          <button onClick={clearFilters} className="self-start text-xs text-[var(--color-brand)] hover:underline">
+            Clear all filters
           </button>
         )}
-      </div>
 
-      <div className="flex flex-col gap-5">
         {/* Location */}
         <div>
           <label htmlFor="pf-location" className="block text-xs font-medium text-[var(--color-text-secondary)] mb-1.5">
@@ -127,7 +141,7 @@ export default function PropertyFilters({ initialFilters }) {
               min="0"
               aria-label="Minimum price"
             />
-            <span className="text-[var(--color-text-muted)] shrink-0 text-sm">to</span>
+            <span className="text-[var(--color-text-muted)] shrink-0 text-sm">–</span>
             <input
               type="number"
               placeholder="Max"
@@ -160,11 +174,7 @@ export default function PropertyFilters({ initialFilters }) {
           </select>
         </div>
 
-        <Button
-          onClick={applyFilters}
-          variant="primary"
-          className="w-full justify-center"
-        >
+        <Button onClick={applyFilters} variant="primary" className="w-full justify-center">
           Apply Filters
         </Button>
       </div>

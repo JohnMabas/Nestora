@@ -120,10 +120,7 @@ export default function LoginPage() {
                     placeholder="you@example.com"
                     aria-invalid={!!fieldErrors.email}
                     aria-describedby={fieldErrors.email ? "login-email-error" : undefined}
-                    className={[
-                      "input-base pl-9",
-                      fieldErrors.email ? "border-red-500/60 focus:border-red-500" : "",
-                    ].join(" ")}
+                    className={`input-base pl-9 ${fieldErrors.email ? "input-error" : ""}`}
                   />
                 </div>
                 {fieldErrors.email && (
@@ -157,10 +154,7 @@ export default function LoginPage() {
                     placeholder="••••••••"
                     aria-invalid={!!fieldErrors.password}
                     aria-describedby={fieldErrors.password ? "login-password-error" : undefined}
-                    className={[
-                      "input-base pl-9 pr-10",
-                      fieldErrors.password ? "border-red-500/60 focus:border-red-500" : "",
-                    ].join(" ")}
+                    className={`input-base pl-9 pr-10 ${fieldErrors.password ? "input-error" : ""}`}
                   />
                   <button
                     type="button"

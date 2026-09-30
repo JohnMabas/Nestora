@@ -4,6 +4,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { AuthProvider } from "@/context/AuthContext";
 import { AgentAuthProvider } from "@/context/AgentAuthContext";
+import { FavoritesProvider } from "@/context/FavoritesContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -59,11 +60,13 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col bg-[var(--color-surface-1)] text-[var(--color-text-primary)]">
         <AuthProvider>
           <AgentAuthProvider>
-            <Header />
-            <main id="main-content" className="flex-1">
-              {children}
-            </main>
-            <Footer />
+            <FavoritesProvider>
+              <Header />
+              <main id="main-content" className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </FavoritesProvider>
           </AgentAuthProvider>
         </AuthProvider>
       </body>

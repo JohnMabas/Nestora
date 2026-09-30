@@ -106,7 +106,7 @@ export default function RegisterPage() {
 
   // Helper: red border when there's a field error
   const errBorder = (name) =>
-    fieldErrors[name] ? "border-red-500/60 focus:border-red-500" : "";
+    fieldErrors[name] ? "input-error" : "";
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 bg-[var(--color-surface-1)]">

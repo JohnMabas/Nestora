@@ -100,7 +100,7 @@ export default function AgentRegisterPage() {
 
   // Error border class
   const errBorder = (name) =>
-    fieldErrors[name] ? "border-red-500/60 focus:border-red-500" : "";
+    fieldErrors[name] ? "input-error" : "";
 
   return (
     <div className="min-h-screen flex items-center justify-center pt-24 pb-12 bg-[var(--color-surface-1)]">

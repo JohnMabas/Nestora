@@ -134,10 +134,7 @@ export default function AgentLoginPage() {
                     placeholder="you@agency.com"
                     aria-invalid={!!fieldErrors.email}
                     aria-describedby={fieldErrors.email ? "agent-email-error" : undefined}
-                    className={[
-                      "input-base pl-9",
-                      fieldErrors.email ? "border-red-500/60 focus:border-red-500" : "",
-                    ].join(" ")}
+                    className={`input-base pl-9 ${fieldErrors.email ? "input-error" : ""}`}
                   />
                 </div>
                 {fieldErrors.email && (
@@ -171,10 +168,7 @@ export default function AgentLoginPage() {
                     placeholder="••••••••"
                     aria-invalid={!!fieldErrors.password}
                     aria-describedby={fieldErrors.password ? "agent-password-error" : undefined}
-                    className={[
-                      "input-base pl-9 pr-10",
-                      fieldErrors.password ? "border-red-500/60 focus:border-red-500" : "",
-                    ].join(" ")}
+                    className={`input-base pl-9 pr-10 ${fieldErrors.password ? "input-error" : ""}`}
                   />
                   <button
                     type="button"
