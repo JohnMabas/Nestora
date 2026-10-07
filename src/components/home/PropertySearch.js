@@ -77,11 +77,11 @@ export default function PropertySearch() {
   return (
     <section
       aria-label="Property and hotel search"
-      className="relative z-20 -mt-2 pb-6"
+      className="relative z-20 -mb-5 pb-6"
     >
       <Container>
         <FadeInOnScroll>
-        <div className="rounded-[var(--radius-2xl)] border border-[var(--color-border)] bg-[var(--color-surface-2)] p-6 shadow-2xl shadow-black/40">
+        <div className="rounded-[var(--radius-2xl)] mt-10 border border-[var(--color-border)] bg-[var(--color-surface-2)] p-6 shadow-2xl shadow-black/40">
           {/* Tabs */}
           <div className="flex items-center gap-1 mb-6 p-1 bg-[var(--color-surface-3)] rounded-[var(--radius-lg)] w-fit">
             {tabs.map((tab) => (
